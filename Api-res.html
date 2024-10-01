@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Chatbot</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-800 text-white flex items-center justify-center h-screen">
+  <div class="w-96">
+    <div class="mb-4">
+      <label for="message" class="block text-sm">Enter your message:</label>
+      <input type="text" id="message" class="w-full p-2 rounded-md text-black">
+    </div>
+    <button onclick="sendMessage()" class="bg-blue-500 hover:bg-blue-700 p-2 rounded-md w-full">Send</button>
+
+    <div id="response" class="mt-4 p-4 bg-gray-900 rounded-md">
+      Response will appear here...
+    </div>
+  </div>
+
+  <script>
+    function sendMessage() {
+      const message = document.getElementById('message').value;
+  
+      fetch('https://staging.beyondhappiness.ai/request_bookenabled-message/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ query: message }),
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('API Response:', data); // Log API response for debugging
+        document.getElementById('response').innerText = JSON.stringify(data, null, 2); // Display API response
+      })
+      .catch(error => {
+        console.error('API Error:', error); // Log error for debugging
+        document.getElementById('response').innerText = 'Error: ' + error;
+      });
+    }
+  </script>
+  
+</body>
+</html>
